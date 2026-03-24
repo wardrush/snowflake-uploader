@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from enum import StrEnum
 
 from flask_login import UserMixin
@@ -11,7 +11,7 @@ from app.extensions import db, login_manager
 
 
 def utcnow() -> datetime:
-    return datetime.now(UTC)
+    return datetime.now(timezone.utc)
 
 
 class SubmissionStatus(StrEnum):
@@ -117,4 +117,3 @@ class AuditEvent(db.Model):
 
     submission = db.relationship("Submission", back_populates="audit_events")
     submission_file = db.relationship("SubmissionFile", back_populates="audit_events")
-

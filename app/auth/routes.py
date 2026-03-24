@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -20,7 +20,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user and user.check_password(form.password.data):
-            user.last_login_at = datetime.now(UTC)
+            user.last_login_at = datetime.now(timezone.utc)
             db.session.commit()
             login_user(user)
             flash("Logged in successfully.", "success")
