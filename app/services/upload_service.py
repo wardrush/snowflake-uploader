@@ -175,7 +175,7 @@ class UploadService:
                     f"{filename}: {exc}",
                     remote_addr,
                 )
-            elif handoff_result.error_message:
+            if handoff_result and handoff_result.error_message:
                 submission_file.handoff_status = HandoffStatus.FAILED.value
                 submission_file.error_message = handoff_result.error_message
                 self._create_audit_event(
@@ -186,7 +186,7 @@ class UploadService:
                     f"{filename}: {handoff_result.error_message}",
                     remote_addr,
                 )
-            else:
+            elif handoff_result:
                 self._create_audit_event(
                     uploader.id,
                     submission.id,
