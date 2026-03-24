@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from enum import StrEnum
+from enum import Enum
 
 from flask_login import UserMixin
 from sqlalchemy import Index
@@ -14,20 +14,24 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
-class SubmissionStatus(StrEnum):
+class StringEnum(str, Enum):
+    pass
+
+
+class SubmissionStatus(StringEnum):
     RECEIVED = "received"
     PARTIAL = "partial"
     FAILED = "failed"
 
 
-class FileUploadStatus(StrEnum):
+class FileUploadStatus(StringEnum):
     RECEIVED = "received"
     DUPLICATE = "duplicate"
     REJECTED = "rejected"
     ERROR = "error"
 
 
-class HandoffStatus(StrEnum):
+class HandoffStatus(StringEnum):
     PENDING = "pending"
     QUEUED = "queued"
     FAILED = "failed"

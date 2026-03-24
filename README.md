@@ -118,8 +118,8 @@ flask --app manage.py db upgrade
 ## PythonAnywhere deployment notes
 
 1. Create a PythonAnywhere web app configured for Flask.
-2. Upload the code to a project directory.
-3. Create a virtualenv and install `requirements.txt`.
+2. Clone the repo into a project directory rather than uploading files manually.
+3. Create a virtualenv with Python 3.10 or newer and install `requirements.txt`.
 4. Set environment variables in PythonAnywhere or load them from a `.env` file stored outside version control.
 5. Point the WSGI file at [`wsgi.py`](/C:/Users/wardr/Downloads/codex-projects/snowflake_uploader/wsgi.py) or import `application = create_app("production")`.
 6. Set `DATABASE_URL` to a PythonAnywhere MySQL URL if moving off SQLite.
@@ -133,6 +133,7 @@ Recommended production settings:
 - use a strong `SECRET_KEY`
 - point logging at a writable file or stdout-compatible destination
 - use MySQL instead of SQLite for multi-user production usage
+- keep the virtualenv Python version and the PythonAnywhere web app version aligned
 
 ## Where to plug in Snowflake or object storage later
 
