@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ config.APP_NAME }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-row">
+        <div>
+          <a class="brand" href="{{ url_for('main.index') }}">{{ config.APP_NAME }}</a>
+          <p class="tagline">Simple intake for agricultural lab files</p>
+        </div>
+        {% if current_user.is_authenticated %}
+          <nav class="nav">
+            <a href="{{ url_for('main.upload') }}">Upload</a>
+            <a href="{{ url_for('main.index') }}">My submissions</a>
+            {% if current_user.is_staff or current_user.is_admin %}
+              <a href="{{ url_for('admin.submissions') }}">Staff view</a>
+            {% endif %}
+            <form method="post" action="{{ url_for('auth.logout') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="link-button" type="submit">Log out</button>
+            </form>
+          </nav>
+        {% endif %}
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="flash-stack" aria-label="Messages">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

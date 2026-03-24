@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}My submissions | {{ config.APP_NAME }}{% endblock %}
+{% block content %}
+  <section class="panel">
+    <div class="section-heading">
+      <div>
+        <h1>My submissions</h1>
+        <p class="helper-text">Upload one or more lab files, then confirm the records were received.</p>
+      </div>
+      <a class="button button-primary" href="{{ url_for('main.upload') }}">Upload files</a>
+    </div>
+
+    {% if recent_submissions %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Submitted</th>
+              <th>Lab name</th>
+              <th>Batch ID</th>
+              <th>Status</th>
+              <th>Files</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for submission in recent_submissions %}
+              <tr>
+                <td>{{ submission.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                <td>{{ submission.lab_name or "—" }}</td>
+                <td>{{ submission.batch_id or "—" }}</td>
+                <td><span class="status status-{{ submission.status }}">{{ submission.status }}</span></td>
+                <td>{{ submission.files|length }}</td>
+                <td><a href="{{ url_for('main.submission_detail', submission_id=submission.id) }}">View</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No submissions yet.</p>
+    {% endif %}
+  </section>
+{% endblock %}

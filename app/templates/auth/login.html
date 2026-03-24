@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Log in | {{ config.APP_NAME }}{% endblock %}
+{% block content %}
+  <section class="panel narrow">
+    <h1>Log in</h1>
+    <p class="helper-text">Use your staff account to upload files for downstream processing.</p>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="form-row">
+        {{ form.email.label(class_="form-label") }}
+        {{ form.email(class_="form-input", autocomplete="username") }}
+        {% for error in form.email.errors %}
+          <p class="field-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div class="form-row">
+        {{ form.password.label(class_="form-label") }}
+        {{ form.password(class_="form-input", autocomplete="current-password") }}
+        {% for error in form.password.errors %}
+          <p class="field-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {{ form.submit(class_="button button-primary button-block") }}
+    </form>
+  </section>
+{% endblock %}

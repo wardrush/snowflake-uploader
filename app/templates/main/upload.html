@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Upload files | {{ config.APP_NAME }}{% endblock %}
+{% block content %}
+  <section class="panel">
+    <h1>Upload lab files</h1>
+    <p class="helper-text">Accepted file types: {{ config.ALLOWED_EXTENSIONS|join(", ") }}. Maximum total request size: {{ (config.MAX_CONTENT_LENGTH / 1024 / 1024)|round(0) | int }} MB.</p>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="form-row">
+        {{ form.files.label(class_="form-label") }}
+        {{ form.files(class_="form-input form-input-file", multiple=true) }}
+        <p class="helper-text">Select one or more spreadsheet or CSV files.</p>
+        {% for error in form.files.errors %}
+          <p class="field-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <div class="form-row">
+        {{ form.lab_name.label(class_="form-label") }}
+        {{ form.lab_name(class_="form-input") }}
+      </div>
+
+      <div class="form-row">
+        {{ form.batch_id.label(class_="form-label") }}
+        {{ form.batch_id(class_="form-input") }}
+      </div>
+
+      <div class="form-row">
+        {{ form.notes.label(class_="form-label") }}
+        {{ form.notes(class_="form-input form-textarea", rows="4") }}
+      </div>
+
+      {{ form.submit(class_="button button-primary button-block") }}
+    </form>
+  </section>
+{% endblock %}

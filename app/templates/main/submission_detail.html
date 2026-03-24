@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Submission {{ submission.id }} | {{ config.APP_NAME }}{% endblock %}
+{% block content %}
+  <section class="panel">
+    <div class="section-heading">
+      <div>
+        <h1>Submission {{ submission.id }}</h1>
+        <p class="helper-text">Submitted {{ submission.created_at.strftime("%Y-%m-%d %H:%M") }} by {{ submission.user.email }}</p>
+      </div>
+      <span class="status status-{{ submission.status }}">{{ submission.status }}</span>
+    </div>
+
+    <dl class="meta-grid">
+      <div>
+        <dt>Lab name</dt>
+        <dd>{{ submission.lab_name or "—" }}</dd>
+      </div>
+      <div>
+        <dt>Batch ID</dt>
+        <dd>{{ submission.batch_id or "—" }}</dd>
+      </div>
+      <div class="meta-wide">
+        <dt>Notes</dt>
+        <dd>{{ submission.notes or "—" }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  {% if outcomes %}
+    <section class="panel">
+      <h2>Upload results</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Status</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for outcome in outcomes %}
+              <tr>
+                <td>{{ outcome.filename }}</td>
+                <td><span class="status status-{{ outcome.status }}">{{ outcome.status }}</span></td>
+                <td>{{ outcome.message }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="panel">
+    <h2>Accepted files</h2>
+    {% if submission.files %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Original filename</th>
+              <th>Checksum</th>
+              <th>Size</th>
+              <th>Upload status</th>
+              <th>Handoff status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for submission_file in submission.files %}
+              <tr>
+                <td>{{ submission_file.original_filename }}</td>
+                <td class="mono">{{ submission_file.checksum_sha256[:12] }}…</td>
+                <td>{{ submission_file.size_bytes }} bytes</td>
+                <td><span class="status status-{{ submission_file.upload_status }}">{{ submission_file.upload_status }}</span></td>
+                <td><span class="status status-{{ submission_file.handoff_status }}">{{ submission_file.handoff_status }}</span></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No files were accepted for this submission.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Audit trail</h2>
+    {% if submission.audit_events %}
+      <ul class="audit-list">
+        {% for event in submission.audit_events|sort(attribute="created_at", reverse=True) %}
+          <li>
+            <strong>{{ event.event_type }}</strong>
+            <span>{{ event.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</span>
+            <p>{{ event.message }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No audit events recorded.</p>
+    {% endif %}
+  </section>
+{% endblock %}

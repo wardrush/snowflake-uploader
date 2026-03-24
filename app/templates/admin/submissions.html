@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Staff submissions | {{ config.APP_NAME }}{% endblock %}
+{% block content %}
+  <section class="panel">
+    <h1>Recent submissions</h1>
+    <p class="helper-text">Latest 50 submissions across all staff users.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Submitted</th>
+            <th>User</th>
+            <th>Lab name</th>
+            <th>Status</th>
+            <th>Files</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for submission in submissions %}
+            <tr>
+              <td>{{ submission.id }}</td>
+              <td>{{ submission.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+              <td>{{ submission.user.email }}</td>
+              <td>{{ submission.lab_name or "—" }}</td>
+              <td><span class="status status-{{ submission.status }}">{{ submission.status }}</span></td>
+              <td>{{ submission.files|length }}</td>
+              <td><a href="{{ url_for('main.submission_detail', submission_id=submission.id) }}">View</a></td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="7">No submissions found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
